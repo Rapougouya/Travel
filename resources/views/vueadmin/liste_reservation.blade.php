@@ -32,7 +32,7 @@
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
         <div class="contentAjout">
-            <h2 class="border-bottom pb-2 mb-0">Liste des reservation</h2>
+            <h2 class="border-bottom pb-2 mb-0">Liste des reservations</h2>
             
 
         </div> @if (Session:: has('status'))
@@ -55,9 +55,6 @@
                     <th scope="col">Heure de depart</th>
                     <th scope="col">Type de reservation</th>
                     <th scope="col">Nombre de place</th>
-                    <th scope="col" class="positionActionBouton">
-                        <div class="actpo">Action</div>
-                    </th>
                 </tr>
             </thead>
 
@@ -80,16 +77,10 @@
                     <td>{{ $reservation->email}}</td>
                     <td>{{ $reservation->ville_depart}}</td>
                     <td>{{ $reservation->ville_destination}}</td>
-                    <td>{{ $reservation->type_reservation}}</td>
-                    <td>{{ $reservation->heure_depart}}</td>
                     <td>{{ $reservation->jour_depart}}</td>
+                    <td>{{ $reservation->heure_depart}}</td>
+                    <td>{{ $reservation->type_reservation}}</td>
                     <td>{{ $reservation->nombre_place}}</td>
-
-                    <td>
-                        <div class="positionActionBouton">
-                            <a href="{{url('delete/'.$reservation->id)}}" class="btn btn-danger" onclick="if(confirm('Voulez-vous supprimer cette reservation?')){document.getElementById.submit()}">Supprimer</a>
-                        </div>
-                    </td>
                 </tr>
                 @endforeach
 
