@@ -119,7 +119,7 @@
                     <label>Nom Complet</label>
                     <input type="text" name="nom_complet">
                     <label>Objet</label>
-                    <input type="text" name="email">
+                    <input type="text" name="objet">
                     <label>Email</label>
                     <input type="text" name="email">
                     <label>Message</label>

@@ -7,11 +7,22 @@ table {
     border-collapse: collapse;
     width: 100%;
     margin: 20px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.651);
 }
 
-table, th, td {
+table, th {
+    border: 2px solid rgb(29, 13, 53);
+    font-size: 30px;
+    color: black;
+    font-weight: bold;
+}
+
+table, td{
+    color: white;
     border: 2px solid rgb(29, 13, 53);
     font-size: 20px;
+    font-weight: bold;
 }
 
 input{
@@ -36,10 +47,11 @@ h2{
     color: white;
 }
 form {
-    font-size: 15px;
+    font-size: 25px;
     font-weight: bold;
     margin-top: 50px;
-    margin-left: 200px;    
+    margin-left: 200px; 
+   
 }
 
 @media only screen and (max-width: 600px) {

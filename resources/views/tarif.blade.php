@@ -42,89 +42,66 @@
         <tr>
             <th>Ville de Départ</th>
             <th>Ville de Destination</th>
-            <th>Tarif</th>
+            <th>Prix</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td class="cell"><a class="btn-sm app-btn-secondary" href="#">Modifier</a>
-                <a class="btn-sm app-btn-secondary" href="#">Supprimer</a>
-            </td>
-        </tr>
+        
     </tbody>
 </table>
 
 <script>
-    // Récupère les données du stockage local ou initialise un tableau vide
     var tarifs = JSON.parse(localStorage.getItem("tarifs")) || [];
 
-    // Fonction pour construire et afficher le tableau
     function afficherTableau() {
         var tableBody = document.getElementById("tarifTable").getElementsByTagName('tbody')[0];
-
-        // Réinitialise le contenu du corps du tableau
         tableBody.innerHTML = "";
 
-        // Boucle à travers les données tarif
-          // Boucle à travers les données tarif
-          for (var i = 0; i < tarifs.length; i++) {
+        for (var i = 0; i < tarifs.length; i++) {
             var tarif = tarifs[i];
-
             var newRow = tableBody.insertRow();
 
-            // Colonne Ville de Départ
             var departCell = newRow.insertCell(0);
             departCell.textContent = tarif.depart;
 
-            // Colonne Ville de Destination
             var destinationCell = newRow.insertCell(1);
             destinationCell.textContent = tarif.destination;
 
-            // Colonne Tarif
             var tarifCell = newRow.insertCell(2);
             tarifCell.textContent = tarif.tarif;
 
-            // Colonne Action (Boutons Supprimer et Modifier)
             var actionCell = newRow.insertCell(3);
 
-            // Bouton Supprimer
             var deleteButton = document.createElement("button");
-            
-            deleteButton.onclick = function() {
-                supprimerTarif(i);
-            };
+            deleteButton.textContent = "Supprimer";
+            (function(index) {
+                deleteButton.onclick = function() {
+                    supprimerTarif(index);
+                };
+            })(i);
             actionCell.appendChild(deleteButton);
 
-            // Bouton Modifier
             var editButton = document.createElement("button");
-            
-            editButton.onclick = function() {
-                modifierTarif(i);
-            };
+            editButton.textContent = "Modifier";
+            (function(index) {
+                editButton.onclick = function() {
+                    modifierTarif(index);
+                };
+            })(i);
             actionCell.appendChild(editButton);
         }
     }
-    
 
-    // Fonction pour ajouter un tarif
     function ajouterTarif() {
         var depart = document.getElementById("depart").value;
         var destination = document.getElementById("destination").value;
         var tarif = document.getElementById("tarif").value;
 
-        // Vérifier si les champs sont remplis
         if (depart && destination && tarif) {
-            // Ajouter le tarif au tableau
             tarifs.push({ depart: depart, destination: destination, tarif: tarif });
-
-            // Sauvegarder le tableau dans le stockage local
             localStorage.setItem("tarifs", JSON.stringify(tarifs));
-
-            // Actualiser le tableau
             afficherTableau();
-
-            // Réinitialiser les champs du formulaire
             document.getElementById("depart").value = "";
             document.getElementById("destination").value = "";
             document.getElementById("tarif").value = "";
@@ -133,32 +110,72 @@
         }
     }
 
-    // Fonction pour supprimer un tarif
-    function supprimerTarif(index) {
-        // Supprimer le tarif du tableau
-        tarifs.splice(index, 1);
+    function modifierTarif(index) {
+    var tarif = tarifs[index];
 
-        // Sauvegarder le tableau dans le stockage local
-        localStorage.setItem("tarifs", JSON.stringify(tarifs));
+    document.getElementById("depart").value = tarif.depart;
+    document.getElementById("destination").value = tarif.destination;
+    document.getElementById("tarif").value = tarif.tarif;
 
-        // Actualiser le tableau
-        afficherTableau();
-    }
+    var editButton = document.querySelector("form button");
+    editButton.textContent = "Modifier";
+    editButton.style.backgroundColor = "blue";
+    editButton.style.color = "white";
+    editButton.onclick = function() {
+        sauvegarderModification(index);
+    };
 
-       // Fonction pour modifier un tarif
-       function modifierTarif(index) {
-        var tarif = tarifs[index];
-
-        // Remplir les champs du formulaire avec les données du tarif sélectionné
-        document.getElementById("depart").value = tarif.depart;
-        document.getElementById("destination").value = tarif.destination;
-        document.getElementById("tarif").value = tarif.tarif;
-
-        // Supprimer le tarif du tableau
+    var deleteButton = document.createElement("button");
+    deleteButton.textContent = "Supprimer";
+    deleteButton.style.backgroundColor = "red";
+    deleteButton.style.color = "white";
+    deleteButton.onclick = function() {
         supprimerTarif(index);
+        document.getElementById("depart").value = "";
+        document.getElementById("destination").value = "";
+        document.getElementById("tarif").value = "";
+    };
+
+    var actionCell = document.getElementById("tarifTable").rows[index + 1].cells[3];
+    actionCell.innerHTML = "";
+    actionCell.appendChild(deleteButton);
+}
+
+    function sauvegarderModification(index) {
+        var depart = document.getElementById("depart").value;
+        var destination = document.getElementById("destination").value;
+        var tarif = document.getElementById("tarif").value;
+
+        if (depart && destination && tarif) {
+            tarifs.splice(index, 0, { depart: depart, destination: destination, tarif: tarif });
+            localStorage.setItem("tarifs", JSON.stringify(tarifs));
+            afficherTableau();
+            document.getElementById("depart").value = "";
+            document.getElementById("destination").value = "";
+            document.getElementById("tarif").value = "";
+
+            var addButton = document.querySelector("form button");
+            addButton.textContent = "Ajouter";
+            addButton.style.backgroundColor = "green";
+            addButton.style.color = "white";
+            addButton.onclick = ajouterTarif;
+        } else {
+            alert("Veuillez remplir tous les champs.");
+        }
     }
 
-    // Appeler la fonction pour afficher le tableau lors du chargement de la page
+    function supprimerTarif(index) {
+    // Demande une confirmation avant de supprimer
+    var confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce tarif ?");
+
+    if (confirmation) {
+    // Supprime le tarif si l'utilisateur a confirmé
+    tarifs.splice(index, 1);
+    localStorage.setItem("tarifs", JSON.stringify(tarifs));
+    afficherTableau();
+    }
+    }
+
     window.onload = afficherTableau;
 </script>
 
